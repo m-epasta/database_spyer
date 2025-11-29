@@ -7,6 +7,7 @@ const App = () => {
             <nav>
                 <Link to="/">Landing</Link>
                 <Link to="/dashboard">Dashboard</Link>
+                <Link to="/connectionsStats">Stats</Link>
             </nav>
 
             <Routes>
