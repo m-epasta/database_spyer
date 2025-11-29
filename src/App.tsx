@@ -1,14 +1,14 @@
 import { Routes, Route, Link } from 'react-router-dom';
-import WelcomePage from './components/WelcomePage';
+import WelcomePage from './pages/WelcomePage';
 
 const App = () => {
     return (
         <div>
-            <nav>
+            {/* <nav>
                 <Link to="/">Landing</Link>
                 <Link to="/dashboard">Dashboard</Link>
                 <Link to="/connectionsStats">Stats</Link>
-            </nav>
+            </nav> */}
 
             <Routes>
                 <Route path='/' element={<WelcomePage/>}/>
