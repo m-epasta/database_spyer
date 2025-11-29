@@ -45,3 +45,5 @@ const ConnectionsStats = () => {
         </div>
     );
 }
+
+export default ConnectionsStats;

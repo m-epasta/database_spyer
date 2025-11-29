@@ -1,16 +1,18 @@
 import '../styles/WelcomePageStyle.css';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+  const navigate = useNavigate();
 
   const handleContinue = () => {
-    
+    navigate('/dashboard');
   }
 
   return (
     <div className="container">
       <header className="header">
         <h1 className="title">DB Spyer</h1>
-        <p className="titleDesc">Your complete database visualizer interface</p>
+        <p className="title-desc">Your complete database visualizer interface</p>
       </header>
       
       <main className="main-content">
