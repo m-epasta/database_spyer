@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import FileUploadDropzone from '../components/DropzoneComponent';
 import '../styles/DashboardStyle.css';
+import { invoke } from '@tauri-apps/api/core';
 
 const Dashboard: React.FC = () => {
     const [dbUploaded, setDbUploaded] = useState<boolean>(false);
@@ -8,6 +9,7 @@ const Dashboard: React.FC = () => {
     const handleSelectedFiles = (files: File[]) => {
         console.log(`Files selected ${files}`);
         // handle file logic there; maybe just in an api/ file
+        
         if (files.length > 0) {
             setDbUploaded(true);
         }
