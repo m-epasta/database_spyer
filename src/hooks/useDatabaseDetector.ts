@@ -28,7 +28,7 @@ export function UseDatabaseDetector(): UseDatabaseDetectorReturn {
     const detectEncryption = useCallback(async (filePath: string): Promise<DatabaseStatus> => {
         try {   
             const bytes = await readFile(filePath);
-            const header = new Uint8Array(bytes.slice(0, 16));
+            const header = bytes.slice(0, 16);
 
             const SQLITE_MAGIC = new Uint8Array([
                 0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00

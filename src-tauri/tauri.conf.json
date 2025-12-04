@@ -34,7 +34,7 @@
   },
   "plugins": {
     "fs": {
-      "scope": ["$APPDATA", "$DESKTOP", "$DOWNLOAD", "$HOME/**"]
+      "requireLiteralLeadingDot": false
     }
   }
 }

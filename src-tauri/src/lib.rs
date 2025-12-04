@@ -1,5 +1,3 @@
-use core::error;
-
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -16,12 +14,12 @@ pub fn run() {
         .expect("error while running tauri application");
 }
 
-#[tauri::command]
-pub async fn visualize_data() {
+// #[tauri::command]
+// pub async fn visualize_data() {
 
-}
+// }
 
 
-fn decrypt_db(db_path: Path) {
+// fn decrypt_db(db_path: Path) {
   
-}
+// }
