@@ -1,63 +1,98 @@
 #!/bin/bash
 
-# create_db.sh
-echo "Setting up environment and creating sample SQLite database..."
+# create_db.sh - Create unencrypted SQLite database for testing
+set -e  # Exit on any error
 
-# Navigate to python_db directory (go up one level from executor, then into python_db)
-cd scripts/python_db
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Logging functions
+log_info() { echo -e "${BLUE}ℹ️  $1${NC}"; }
+log_success() { echo -e "${GREEN}✅ $1${NC}"; }
+log_warning() { echo -e "${YELLOW}⚠️  $1${NC}"; }
+log_error() { echo -e "${RED}❌ $1${NC}"; }
+
+log_info "Setting up environment and creating sample SQLite database..."
+
+# Navigate to project root directory first
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+PYTHON_DIR="$PROJECT_ROOT/scripts/python_db"
+
+log_info "Project root: $PROJECT_ROOT"
+log_info "Python scripts: $PYTHON_DIR"
+
+# Navigate to python_db directory
+cd "$PYTHON_DIR" || { log_error "Failed to navigate to $PYTHON_DIR"; exit 1; }
 
 # Check if Python is installed
 if ! command -v python3 &> /dev/null; then
-    echo "Python 3 is not installed or not in PATH"
+    log_error "Python 3 is not installed or not in PATH"
     exit 1
 fi
 
+log_info "Python 3 found: $(python3 --version)"
+
 # Create virtual environment if it doesn't exist
 if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
+    log_info "Creating virtual environment..."
     python3 -m venv venv
 fi
 
 # Activate virtual environment
-echo "Activating virtual environment..."
-cd scripts/python_db
+log_info "Activating virtual environment..."
 source venv/bin/activate
 
-# Install requirements if requirements.txt exists
-if [ -f "requirements.txt" ]; then
-    echo "Installing requirements..."
-    pip install -r requirements.txt
-fi
+# Install cryptography for database operations
+log_info "Installing required dependencies..."
+pip install cryptography > /dev/null 2>&1
+log_success "Dependencies installed"
 
 # Check if the Python script exists
-if [ ! -f "create_sqlite_db.py" ]; then
-    echo "create_sqlite_db.py not found in current directory"
-    echo "Current directory: $(pwd)"
+PYTHON_SCRIPT="create_sqlite_db.py"
+if [ ! -f "$PYTHON_SCRIPT" ]; then
+    log_error "$PYTHON_SCRIPT not found in $(pwd)"
+    log_info "Available files:"
+    ls -la *.py 2>/dev/null || log_warning "No Python scripts found"
     deactivate
     exit 1
 fi
 
 # Run the Python script
-echo "Running Python script..."
-python create_sqlite_db.py
-
-# Check if the script ran successfully
-if [ $? -eq 0 ] && [ -f "sample.db" ]; then
-    echo ""
-    echo "Database created successfully!"
-    echo "File: sample.db"
-    
-    # Show file info
-    file_size=$(du -h sample.db | cut -f1)
-    echo "Size: $file_size"
-    
+log_info "Running database creation script..."
+if python3 "$PYTHON_SCRIPT"; then
+    log_success "Python script executed successfully"
 else
-    echo "Failed to create database!"
+    log_error "Python script failed with exit code $?"
+    deactivate
+    exit 1
+fi
+
+# Check if the database was created successfully
+OUTPUT_FILE="sample.db"
+if [ -f "$OUTPUT_FILE" ]; then
+    FILE_SIZE=$(du -h "$OUTPUT_FILE" | cut -f1)
+    FILE_PATH="$(pwd)/$OUTPUT_FILE"
+
+    log_success "Database created successfully!"
+    echo ""
+    echo "  File: $OUTPUT_FILE"
+    echo "  Path: $FILE_PATH"
+    echo "  Size: $FILE_SIZE"
+    echo ""
+    echo "Ready for testing with Database Spyer!"
+
+else
+    log_error "Database file '$OUTPUT_FILE' was not created"
+    log_info "Check the Python script output above for errors"
     deactivate
     exit 1
 fi
 
 # Deactivate virtual environment
 deactivate
-echo ""
-echo "Setup complete! Virtual environment is ready for future use."
+log_success "Setup complete! Virtual environment deactivated."

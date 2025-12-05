@@ -1,0 +1,3 @@
+# Python dependencies for database creation scripts
+cryptography>=3.4.0  # For encryption/decryption operations
+# Note: SQLCipher would require additional system dependencies if needed
