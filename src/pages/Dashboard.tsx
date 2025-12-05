@@ -4,7 +4,7 @@ import { Database, File, AlertCircle, Loader2, CheckCircle } from 'lucide-react'
 import '../styles/DashboardStyle.css';
 import { UseDatabaseDetector } from '../hooks/useDatabaseDetector';
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC = React.memo(() => {
     const [dbUploaded, setDbUploaded] = useState<boolean>(false);
     const { detect, currentDetection, isDetecting, error } = UseDatabaseDetector();
 
@@ -114,6 +114,9 @@ const Dashboard: React.FC = () => {
             </main>
         </div>
     );
-};
+});
+
+// Add display name for better debugging
+Dashboard.displayName = 'Dashboard';
 
 export default Dashboard;

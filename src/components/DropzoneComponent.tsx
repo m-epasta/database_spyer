@@ -18,15 +18,30 @@ const FileUploadDropzone: React.FC<FileUploadDropzoneProps> = ({
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
         setIsDragOver(false);
-        const newFiles = Array.from(e.dataTransfer.files).slice(0, maxFiles);
-        setFiles(newFiles);
-        onFilesSelected(newFiles);
+        const droppedFiles = Array.from(e.dataTransfer.files);
+
+        // For single-file mode (maxFiles === 1), take only first file
+        // For multi-file mode, slice to maxFiles
+        const selectedFiles = maxFiles === 1 ? (droppedFiles[0] ? [droppedFiles[0]] : [])
+                                      : droppedFiles.slice(0, maxFiles);
+
+        if (selectedFiles.length > 0) {
+            setFiles(selectedFiles);
+            onFilesSelected(selectedFiles);
+        }
     }, [maxFiles, onFilesSelected]);
 
     const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        const newFiles = Array.from(e.target.files || []).slice(0, maxFiles);
-        setFiles(newFiles);
-        onFilesSelected(newFiles);
+        const selectedFiles = Array.from(e.target.files || []);
+
+        // For single-file mode, take only first file
+        const finalFiles = maxFiles === 1 ? (selectedFiles[0] ? [selectedFiles[0]] : [])
+                                   : selectedFiles.slice(0, maxFiles);
+
+        if (finalFiles.length > 0) {
+            setFiles(finalFiles);
+            onFilesSelected(finalFiles);
+        }
     }, [maxFiles, onFilesSelected]);
 
     const removeFile = (index: number) => {
@@ -45,7 +60,7 @@ const FileUploadDropzone: React.FC<FileUploadDropzoneProps> = ({
       >
         <input
           type="file"
-          multiple
+          multiple={maxFiles > 1}  // Only allow multiple when actually needed
           accept={acceptedFileTypes}
           onChange={handleFileInput}
           style={{ display: 'none' }}
@@ -63,9 +78,11 @@ const FileUploadDropzone: React.FC<FileUploadDropzoneProps> = ({
             <div key={index} className="file-item">
               <File size={16} />
               <span className="file-name">{file.name}</span>
-              <button onClick={() => removeFile(index)} className="remove-btn">
-                <X size={16} />
-              </button>
+              {maxFiles > 1 && (  // Only show remove button when multiple files are allowed
+                <button onClick={() => removeFile(index)} className="remove-btn">
+                  <X size={16} />
+                </button>
+              )}
             </div>
           ))}
         </div>
