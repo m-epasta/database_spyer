@@ -20,6 +20,23 @@ export default [
           jsx: true,
         },
       },
+      globals: {
+        // Browser globals
+        console: 'readonly',
+        window: 'readonly',
+        document: 'readonly',
+        HTMLElement: 'readonly',
+        HTMLInputElement: 'readonly',
+        alert: 'readonly',
+        AbortSignal: 'readonly',
+        // Node/Tauri globals
+        setTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearTimeout: 'readonly',
+        clearInterval: 'readonly',
+        localStorage: 'readonly',
+        process: 'readonly',
+      },
     },
     plugins: {
       '@typescript-eslint': typescriptPlugin,
@@ -30,7 +47,7 @@ export default [
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
-      
+
       // General code quality
       'prefer-const': 'error',
       'no-var': 'error',

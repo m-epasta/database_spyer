@@ -44,6 +44,6 @@ const ConnectionsStats = () => {
             </button>
         </div>
     );
-}
+};
 
 export default ConnectionsStats;

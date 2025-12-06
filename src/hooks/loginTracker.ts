@@ -22,7 +22,7 @@ export function useConnectionTracker() {
         successfulConnections: 0,
         failedConnections: 0,
         activeConnections: 0,
-        connectionHistory: []
+        connectionHistory: [],
     });
 
     useEffect(() => {
@@ -30,21 +30,21 @@ export function useConnectionTracker() {
         if (savedStats) {
             try {
                 const parsed = JSON.parse(savedStats);
-                // conver timestamp back to Date Object
-                const historyWithDate = parsed.connectionHistory.map((event: any) => ({
+                // convert timestamp back to Date Object
+                const historyWithDate = (parsed.connectionHistory as Array<Omit<ConnectionEvent, 'timestamp'> & { timestamp: string }>).map((event) => ({
                     ...event,
-                    timestamp: new Date(event.timestamp)
+                    timestamp: new Date(event.timestamp),
                 }));
                 // update state
-                setStats({ ...parsed, connectionHistory: historyWithDate });    
-            } catch(error: any) {
+                setStats({ ...parsed, connectionHistory: historyWithDate });
+            } catch (error: unknown) {
                 console.error('Failed to load connection stats:', error);
             }
         }
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('connectionStats', JSON.stringify(stats))
+        localStorage.setItem('connectionStats', JSON.stringify(stats));
     }, [stats]);
 
     // register success
@@ -55,7 +55,7 @@ export function useConnectionTracker() {
             timestamp: new Date(),
             type: 'success',
             databaseType,
-            connectionName
+            connectionName,
         };
 
         return {
@@ -63,7 +63,7 @@ export function useConnectionTracker() {
             successfulConnections: prev.successfulConnections + 1,
             failedConnections: prev.failedConnections,
             activeConnections: prev.activeConnections + 1,
-            connectionHistory: [newEvent, ...prev.connectionHistory].slice(0, 100) // Keep last 100 events
+            connectionHistory: [newEvent, ...prev.connectionHistory].slice(0, 100), // Keep last 100 events
         };
         });
     }, []);
@@ -76,7 +76,7 @@ export function useConnectionTracker() {
             timestamp: new Date(),
             type: 'failure',
             databaseType,
-            connectionName
+            connectionName,
         };
 
         return {
@@ -84,7 +84,7 @@ export function useConnectionTracker() {
             successfulConnections: prev.successfulConnections,
             failedConnections: prev.failedConnections + 1,
             activeConnections: prev.activeConnections,
-            connectionHistory: [newEvent, ...prev.connectionHistory].slice(0, 100)
+            connectionHistory: [newEvent, ...prev.connectionHistory].slice(0, 100),
         };
         });
     }, []);
@@ -97,13 +97,13 @@ export function useConnectionTracker() {
             timestamp: new Date(),
             type: 'disconnected',
             databaseType,
-            connectionName
+            connectionName,
         };
 
         return {
             ...prev,
             activeConnections: Math.max(0, prev.activeConnections - 1),
-            connectionHistory: [newEvent, ...prev.connectionHistory].slice(0, 100)
+            connectionHistory: [newEvent, ...prev.connectionHistory].slice(0, 100),
         };
         });
     }, []);
@@ -115,14 +115,14 @@ export function useConnectionTracker() {
         successfulConnections: 0,
         failedConnections: 0,
         activeConnections: 0,
-        connectionHistory: []
+        connectionHistory: [],
         });
     }, []);
 
     // filter stats by db type
     const getStatsByDatabaseType = useCallback((databaseType: string) => {
         const filteredHistory = stats.connectionHistory.filter(
-            event => event.databaseType === databaseType
+            event => event.databaseType === databaseType,
         );
 
         return {
@@ -130,7 +130,7 @@ export function useConnectionTracker() {
             successful: filteredHistory.filter(event => event.type === 'success').length,
             failed: filteredHistory.filter(event => event.type === 'failure').length,
             active: filteredHistory.filter(event => event.type === 'success').length - 
-                    filteredHistory.filter(event => event.type === 'disconnected').length
+                    filteredHistory.filter(event => event.type === 'disconnected').length,
             };
     }, [stats.connectionHistory]);
 
@@ -146,6 +146,6 @@ export function useConnectionTracker() {
         registerDisconnection,
         resetStats,
         getStatsByDatabaseType,
-        getRecentConnections
+        getRecentConnections,
     };
 }

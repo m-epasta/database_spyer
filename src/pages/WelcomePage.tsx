@@ -6,7 +6,7 @@ function App() {
 
   const handleContinue = () => {
     navigate('/dashboard');
-  }
+  };
 
   return (
     <div className="container">

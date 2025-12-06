@@ -14,10 +14,10 @@ const Dashboard: React.FC = React.memo(() => {
                 title: 'Select Database File',
                 filters: [{
                     name: 'Database files',
-                    extensions: ['db', 'sqlite', 'sqlite3']
+                    extensions: ['db', 'sqlite', 'sqlite3'],
                 }],
                 multiple: false,
-                defaultPath: undefined
+                defaultPath: undefined,
             });
 
             if (!selected || typeof selected !== 'string') {
@@ -28,26 +28,23 @@ const Dashboard: React.FC = React.memo(() => {
 
             // Handle case where detect returned null (invalid filePath)
             if (!result) {
-                console.error('Detection returned null - invalid file path');
                 alert('Unable to process the selected file. Please ensure it\'s a valid database file with proper permissions.');
                 return;
             }
 
             if (result.status === 'unencrypted') {
                 setDbUploaded(true);
-                console.log(`Unencrypted Database loaded successfully.`);
             } else if (result.status === 'encrypted') {
-                console.log('Encrypted database detected — need password');
                 alert('This database appears to be encrypted. Please contact support for encrypted database support.');
             } else if (result.status === 'error') {
                 alert(`Error detecting database: ${result.error}`);
             } else {
-                console.log(`Detection status: ${result.status}`);
-                alert(`Unable to load the file as database. Make sure you're providing a valid database file.`);
+                alert('Unable to load the file as database. Make sure you\'re providing a valid database file.');
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error('File selection failed:', error);
-            alert(`Failed to open file dialog: ${error.message || 'Unknown error'}`);
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            alert(`Failed to open file dialog: ${errorMessage}`);
         }
     }, [detect]);
 

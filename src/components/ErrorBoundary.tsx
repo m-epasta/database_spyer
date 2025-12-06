@@ -60,7 +60,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
           backgroundColor: '#fef2f2',
           border: '1px solid #fecaca',
           borderRadius: '8px',
-          margin: '20px'
+          margin: '20px',
         }}>
           <AlertTriangle size={48} style={{ color: '#dc2626', marginBottom: '16px' }} />
           <h2 style={{ color: '#dc2626', marginBottom: '8px' }}>
@@ -69,7 +69,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
           <p style={{
             color: '#7f1d1d',
             marginBottom: '20px',
-            maxWidth: '500px'
+            maxWidth: '500px',
           }}>
             The application encountered an unexpected error. This has been logged and we're working to fix it.
           </p>
@@ -87,7 +87,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
               borderRadius: '6px',
               cursor: 'pointer',
               fontSize: '14px',
-              fontWeight: '500'
+              fontWeight: '500',
             }}
           >
             <RefreshCw size={16} />
@@ -99,7 +99,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
               marginTop: '20px',
               fontSize: '12px',
               color: '#374151',
-              textAlign: 'left'
+              textAlign: 'left',
             }}>
               <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>
                 Error Details (Development Only)
@@ -111,7 +111,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
                 overflow: 'auto',
                 marginTop: '8px',
                 fontSize: '11px',
-                maxHeight: '200px'
+                maxHeight: '200px',
               }}>
                 {this.state.error.toString()}
                 {this.state.errorInfo?.componentStack && `\n\nComponent Stack:\n${this.state.errorInfo.componentStack}`}

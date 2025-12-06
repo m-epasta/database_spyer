@@ -9,12 +9,6 @@ const App = () => {
     return (
         <ErrorBoundary>
             <div>
-                {/* <nav>
-                    <Link to="/">Landing</Link>
-                    <Link to="/dashboard">Dashboard</Link>
-                    <Link to="/connectionsStats">Stats</Link>
-                </nav> */}
-
                 <ScrollToTop />
                 <ErrorBoundary>
                     <Routes>
@@ -26,6 +20,6 @@ const App = () => {
             </div>
         </ErrorBoundary>
     );
-}
+};
 
 export default App;

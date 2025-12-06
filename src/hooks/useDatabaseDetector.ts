@@ -1,6 +1,6 @@
-import { useState, useCallback, useMemo } from "react";
-import { readFile } from "@tauri-apps/plugin-fs";
-import { invoke } from "@tauri-apps/api/core";
+import { useState, useCallback, useMemo } from 'react';
+import { readFile } from '@tauri-apps/plugin-fs';
+import { invoke } from '@tauri-apps/api/core';
 
 export type DatabaseStatus = 'unencrypted' | 'encrypted' | 'unknown' | 'detecting' | 'error';
 
@@ -16,7 +16,8 @@ interface DetectionResult {
 }
 
 interface UseDatabaseDetectorReturn {
-    detect: (filePath: string) => Promise<DetectionResult | null>;
+    // eslint-disable-next-line no-unused-vars
+    detect: (path: string) => Promise<DetectionResult | null>;
     currentDetection: DetectionResult | null;
     isDetecting: boolean;
     error: string | null;
@@ -45,7 +46,7 @@ export function UseDatabaseDetector(): UseDatabaseDetectorReturn {
     
     // Memoized header patterns for better performance
     const SQLITE_MAGIC = useMemo(() => new Uint8Array([
-        0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00
+        0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66, 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00,
     ]), []);
 
     const detectEncryption = useCallback(async (filePath: string, signal?: AbortSignal): Promise<DatabaseStatus> => {
@@ -81,7 +82,7 @@ export function UseDatabaseDetector(): UseDatabaseDetectorReturn {
                     }
 
                     const probeResult = await invoke<{ canOpen: boolean }>('test_database_connection', {
-                        path: filePath
+                        path: filePath,
                     });
 
                     const status = probeResult.canOpen ? 'unencrypted' : 'encrypted';
@@ -90,7 +91,7 @@ export function UseDatabaseDetector(): UseDatabaseDetectorReturn {
                     detectionCache.set(filePath, { status, timestamp: Date.now() });
                     return status;
 
-                } catch (invokeError) {
+                } catch {
                     // If connection test fails, assume encrypted
                     const status: DatabaseStatus = 'encrypted';
                     detectionCache.set(filePath, { status, timestamp: Date.now() });
@@ -144,7 +145,7 @@ export function UseDatabaseDetector(): UseDatabaseDetectorReturn {
     }, [SQLITE_MAGIC]);
 
     const detect = useCallback(async (filePath: string): Promise<DetectionResult | null> => {
-        if (!filePath) return null;
+        if (!filePath) {return null;}
 
         setIsDetecting(true);
         setError(null);
@@ -155,20 +156,20 @@ export function UseDatabaseDetector(): UseDatabaseDetectorReturn {
             const result: DetectionResult = {
                 status,
                 filePath,
-                lastChecked: new Date()
+                lastChecked: new Date(),
             };
 
             setCurrentDetection(result);
             return result;
-        } catch (error: any) {
-            const errorMessage = error.message || 'Unknown detection error';
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown detection error';
             setError(errorMessage);
 
             const result: DetectionResult = {
                 status: 'error',
                 filePath,
                 lastChecked: new Date(),
-                error: errorMessage
+                error: errorMessage,
             };
             setCurrentDetection(result);
             return result;
@@ -194,6 +195,6 @@ export function UseDatabaseDetector(): UseDatabaseDetectorReturn {
         isDetecting,
         error,
         clearResult,
-        retry
+        retry,
     };
 }
