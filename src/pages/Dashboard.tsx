@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { open } from '@tauri-apps/plugin-dialog';
 import { Database, File, AlertCircle, Loader2, CheckCircle, FolderOpen, FileText, Settings, ArrowRight, Clock, BarChart3 } from 'lucide-react';
-import '../styles/DashboardStyle.css';
+import '../styles/DashboardStyle.scss';
 import { UseDatabaseDetector } from '../hooks/useDatabaseDetector';
 
 const Dashboard: React.FC = React.memo(() => {
@@ -256,4 +256,3 @@ const Dashboard: React.FC = React.memo(() => {
 
 // Add display name for better debugging
 Dashboard.displayName = 'Dashboard';
-

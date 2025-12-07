@@ -21,7 +21,8 @@ pub fn run() {
             greet,
             test_database_connection,
             get_table_list,
-            get_table_info])
+            get_table_info,
+            execute_query])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
@@ -45,6 +46,12 @@ async fn get_table_list(path: String) -> Result<Vec<String>, String> {
 async fn get_table_info(path: String, table: String) -> Result<crate::models::database::TableInfo, String> {
     use crate::database::schema::get_table_info_impl;
     get_table_info_impl(path, table).await
+}
+
+#[tauri::command]
+async fn execute_query(path: String, query: String) -> Result<crate::models::database::QueryResult, String> {
+    use crate::database::schema::execute_query_impl;
+    execute_query_impl(path, query).await
 }
 
 // #[tauri::command]

@@ -1,5 +1,5 @@
 import { useConnectionTracker } from '../hooks/loginTracker';
-import '../styles/ConnectionsStatsStyle.css';
+import '../styles/ConnectionsStatsStyle.scss';
 import { Activity, Database, AlertTriangle, CheckCircle, Clock, TrendingUp, User, Zap } from 'lucide-react';
 
 const ConnectionsStats = () => {

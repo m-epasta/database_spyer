@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-dialog';
-import { Database, Table, FolderOpen, AlertCircle, Loader2, CheckCircle, RefreshCw, Eye, Settings } from 'lucide-react';
-import './TableExplorer.css';
+import { Database, Table, FolderOpen, AlertCircle, Loader2, RefreshCw, Eye, Settings } from 'lucide-react';
+import { useDatabase } from '../../../hooks/databaseContext';
+import './TableExplorer.scss';
 
 const TableExplorer: React.FC = () => {
+  const { setCurrentDatabasePath } = useDatabase();
   const [currentDbPath, setCurrentDbPath] = useState<string | null>(null);
   const [tables, setTables] = useState<string[]>([]);
   const [selectedTable, setSelectedTable] = useState<string | null>(null);
@@ -44,6 +46,7 @@ const TableExplorer: React.FC = () => {
 
       if (selected && typeof selected === 'string') {
         setCurrentDbPath(selected);
+        setCurrentDatabasePath(selected);
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to open file dialog';

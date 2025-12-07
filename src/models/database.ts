@@ -24,8 +24,9 @@ export interface DatabaseConnection {
 // Query result types
 export interface QueryResult {
   columns: string[];
-  rows: (string | number | boolean | null)[][];
-  executionTime: number;
+  rows: (string | null)[][];
+  executionTimeMs: number;
+  rowCount: number;
 }
 
 export interface QueryError {

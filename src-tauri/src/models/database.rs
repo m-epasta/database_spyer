@@ -15,3 +15,11 @@ pub struct ColumnInfo {
     pub primary_key: bool,
     pub default_value: Option<String>,
 }
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct QueryResult {
+    pub columns: Vec<String>,
+    pub rows: Vec<Vec<Option<String>>>,
+    pub execution_time_ms: u64,
+    pub row_count: usize,
+}

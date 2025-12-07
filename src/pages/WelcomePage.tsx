@@ -1,6 +1,6 @@
-import '../styles/WelcomePageStyle.css';
+import '../styles/WelcomePageStyle.scss';
 import { useNavigate } from 'react-router-dom';
-import { Database, Table, Search, BarChart3, Zap, Shield, ArrowRight } from 'lucide-react';
+import { Database, Table, Search, BarChart3, Shield, ArrowRight } from 'lucide-react';
 
 function App() {
   const navigate = useNavigate();

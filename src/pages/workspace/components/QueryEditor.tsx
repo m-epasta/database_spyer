@@ -1,28 +1,41 @@
 import React, { useState } from 'react';
-import { Play, Square, RotateCcw, Terminal, PlayCircle } from 'lucide-react';
-import './QueryEditor.css';
+import { invoke } from '@tauri-apps/api/core';
+import { Play, RotateCcw, Terminal, PlayCircle } from 'lucide-react';
+import { QueryResult } from '../../../models/database';
+import { useDatabase } from '../../../hooks/databaseContext';
+import './QueryEditor.scss';
 
 const QueryEditor: React.FC = () => {
+  const { currentDatabasePath } = useDatabase();
   const [query, setQuery] = useState('');
   const [isRunning, setIsRunning] = useState(false);
-  const [results, setResults] = useState<any[] | null>(null);
+  const [results, setResults] = useState<QueryResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleRunQuery = async () => {
     if (!query.trim()) return;
+    if (!currentDatabasePath) {
+      setError('No database selected. Please select a database first.');
+      return;
+    }
 
     setIsRunning(true);
     setResults(null);
+    setError(null);
 
-    // Simulate query execution - replace with actual API call
-    setTimeout(() => {
-      // Mock results
-      setResults([
-        { id: 1, name: 'Mock Record 1', value: 'Data A' },
-        { id: 2, name: 'Mock Record 2', value: 'Data B' },
-        { id: 3, name: 'Mock Record 3', value: 'Data C' },
-      ]);
+    try {
+      const result: QueryResult = await invoke('execute_query', {
+        path: currentDatabasePath,
+        query: query.trim()
+      });
+
+      setResults(result);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to execute query';
+      setError(errorMessage);
+    } finally {
       setIsRunning(false);
-    }, 1000);
+    }
   };
 
   const handleClear = () => {
@@ -115,6 +128,16 @@ const QueryEditor: React.FC = () => {
           </div>
         </div>
 
+        {/* Error Display */}
+        {error && (
+          <div className="error-section">
+            <div className="error-message">
+              <Terminal size={20} />
+              <span>{error}</span>
+            </div>
+          </div>
+        )}
+
         {/* Results Section */}
         {(results || isRunning) && (
           <div className="results-section">
@@ -122,7 +145,7 @@ const QueryEditor: React.FC = () => {
               <h4>Query Results</h4>
               {results && (
                 <span className="results-count">
-                  {results.length} row{results.length !== 1 ? 's' : ''}
+                  {results.rowCount} row{results.rowCount !== 1 ? 's' : ''} ({(results.executionTimeMs / 1000).toFixed(2)}s)
                 </span>
               )}
             </div>
@@ -132,28 +155,34 @@ const QueryEditor: React.FC = () => {
                 <div className="terminal-spinner" />
                 <span>Executing query...</span>
               </div>
-            ) : results && results.length > 0 ? (
+            ) : results && results.rowCount > 0 ? (
               <div className="results-table">
                 <div className="table-scroll">
                   <table>
                     <thead>
                       <tr>
-                        {Object.keys(results[0]).map(key => (
-                          <th key={key}>{key}</th>
+                        {results.columns.map(col => (
+                          <th key={col}>{col}</th>
                         ))}
                       </tr>
                     </thead>
                     <tbody>
-                      {results.map((row, index) => (
+                      {results.rows.map((row, index) => (
                         <tr key={index}>
-                          {Object.values(row).map((value, cellIndex) => (
-                            <td key={cellIndex}>{String(value)}</td>
+                          {row.map((value, cellIndex) => (
+                            <td key={cellIndex}>{value || 'NULL'}</td>
                           ))}
                         </tr>
                       ))}
                     </tbody>
                   </table>
                 </div>
+              </div>
+            ) : results && results.rowCount === 0 ? (
+              <div className="no-results">
+                <Terminal size={24} />
+                <p>Query executed successfully</p>
+                <span className="execution-time">Execution time: {(results.executionTimeMs / 1000).toFixed(2)}s</span>
               </div>
             ) : (
               <div className="no-results">

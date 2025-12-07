@@ -1,9 +1,23 @@
-/* Docker/K8s Style Workspace */
+// ===== WORKSPACE COMPONENT STYLES =====
+
+// Import global variables (would normally be a partial)
+// For now, defining component-specific variables
+$workspace-bg: #0d1117;
+$workspace-text: #f0f6fc;
+$workspace-border: #404040;
+$workspace-header-bg: #2d2d2d;
+$workspace-card-bg: #252526;
+$workspace-hover-bg: #37373d;
+
+/* Workspace Container */
 .workspace {
   min-height: 100vh;
-  background-color: #0d1117;
-  color: #f0f6fc;
+  background-color: $workspace-bg;
+  color: $workspace-text;
+
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
 }
@@ -62,20 +76,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.action-btn:hover {
-  background: #404040;
-  color: #f8f9fa;
-}
+  &:hover {
+    background: $workspace-border;
+    color: $workspace-text;
+  }
 
-.action-btn.primary {
-  background: #2496ed;
-  color: #ffffff;
-}
+  &.primary {
+    background: #2496ed;
+    color: #ffffff;
 
-.action-btn.primary:hover {
-  background: #1f8ce7;
+    &:hover {
+      background: #1f8ce7;
+    }
+  }
 }
 
 /* Header Navigation Tabs */

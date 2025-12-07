@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { FileSearch, Table, BarChart3, Database, ChevronRight, Plus, Settings, FolderOpen } from 'lucide-react';
-import './Workspace.css';
+import { FileSearch, Table, BarChart3, Database, Plus, Settings } from 'lucide-react';
+import './Workspace.scss';
 
 interface TabItem {
   id: string;
@@ -31,20 +31,10 @@ const tabs: TabItem[] = [
   },
 ];
 
-interface DatabaseConnection {
-  id: string;
-  name: string;
-  type: 'sqlite' | 'postgres' | 'mysql';
-  status: 'connected' | 'disconnected' | 'connecting' | 'error';
-}
-
 const Workspace: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [activeTab, setActiveTab] = useState('explorer');
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [databases, setDatabases] = useState<DatabaseConnection[]>([]);
-  const [selectedDatabase, setSelectedDatabase] = useState<string | null>(null);
 
   // Determine active tab from current route
   useEffect(() => {
@@ -62,18 +52,7 @@ const Workspace: React.FC = () => {
     }
   };
 
-  const handleDatabaseSelect = (dbId: string) => {
-    setSelectedDatabase(dbId);
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'connected': return '#10b981';
-      case 'connecting': return '#f59e0b';
-      case 'error': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
+  // Database state is managed through context in child components
 
   return (
     <div className="workspace">
@@ -112,57 +91,11 @@ const Workspace: React.FC = () => {
       </header>
 
       <div className="workspace-main">
-        {/* Sidebar */}
-        <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+        {/* Sidebar - Collapsed state for future use */}
+        <aside className="sidebar collapsed">
           <div className="sidebar-content">
-            {/* Databases Section */}
             <div className="sidebar-section">
-              <div className="section-header">
-                <button
-                  className="collapse-btn"
-                  onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                >
-                  <ChevronRight size={16} className={sidebarCollapsed ? '' : 'rotated'} />
-                </button>
-                {!sidebarCollapsed && <h3>Databases</h3>}
-              </div>
-
-              {!sidebarCollapsed && (
-                <div className="databases-list">
-                  {databases.length === 0 ? (
-                    <div className="empty-state">
-                      <FolderOpen size={32} />
-                      <p>No databases connected</p>
-                      <button className="add-db-btn">
-                        <Plus size={14} />
-                        Add Database
-                      </button>
-                    </div>
-                  ) : (
-                    databases.map(db => (
-                      <div
-                        key={db.id}
-                        className={`db-item ${selectedDatabase === db.id ? 'active' : ''}`}
-                        onClick={() => handleDatabaseSelect(db.id)}
-                      >
-                        <div className="db-icon">
-                          <Database size={16} />
-                        </div>
-                        <div className="db-info">
-                          <div className="db-name">{db.name}</div>
-                          <div className="db-status">
-                            <span
-                              className="status-dot"
-                              style={{ backgroundColor: getStatusColor(db.status) }}
-                            />
-                            {db.status}
-                          </div>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
+              <span className="placeholder-text">DB Explorer</span>
             </div>
           </div>
         </aside>

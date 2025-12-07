@@ -6,6 +6,7 @@ import QueryEditor from './pages/workspace/components/QueryEditor';
 import ConnectionsStats from './pages/ConnectionsStats';
 import ScrollToTop from './components/ScrollToTop';
 import ErrorBoundary from './components/ErrorBoundary';
+import { DatabaseProvider } from './hooks/databaseContext';
 
 const App = () => {
     return (
@@ -15,7 +16,11 @@ const App = () => {
                 <ErrorBoundary>
                     <Routes>
                         <Route path='/' element={<WelcomePage/>}/>
-                        <Route path='/workspace' element={<Workspace />}>
+                        <Route path='/workspace' element={
+                            <DatabaseProvider>
+                                <Workspace />
+                            </DatabaseProvider>
+                        }>
                             <Route index element={<TableExplorer />} />
                             <Route path='query' element={<QueryEditor />} />
                             <Route path='stats' element={<ConnectionsStats />} />

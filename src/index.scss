@@ -1,18 +1,135 @@
-/* Global Dark Theme - Docker/K8s Style */
+/* ===== SCSS VARIABLES & MIXINS ===== */
+
+// Colors
+$primary: #2496ed;
+$primary-hover: #1f8ce7;
+$success: #10b981;
+$warning: #f59e0b;
+$error: #ef4444;
+$info: #61dafb;
+
+// Gray Scale
+$text-primary: #f8f9fa;
+$text-secondary: #9ca3af;
+$text-muted: #6b7280;
+$text-accent: #61dafb;
+
+// Backgrounds
+$bg-primary: #0d1117;
+$bg-secondary: #1a1a1a;
+$bg-tertiary: #1e1e1e;
+$bg-card: #252526;
+$bg-header: #2d2d2d;
+$bg-hover: #37373d;
+$bg-focused: #404040;
+$bg-input: #161b22;
+
+// Borders
+$border-primary: #3c3c3c;
+$border-secondary: #404040;
+$border-accent: $primary;
+
+// Spacing & Layout
+$border-radius: 8px;
+$border-radius-sm: 4px;
+$border-radius-lg: 12px;
+$spacing-unit: 0.5rem;
+$transition: all 0.2s ease;
+$transition-fast: all 0.15s ease;
+$font-family: 'SF Mono', 'Monaco', 'Inconsolata', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+$monospace: 'SF Mono', 'Monaco', 'Menlo', monospace;
+
+// Mixins
+@mixin btn-base {
+  border-radius: $border-radius;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: $transition;
+}
+
+@mixin input-base {
+  border-radius: $border-radius;
+  border: 1px solid $border-secondary;
+  padding: 0.6em;
+  font-family: inherit;
+  font-size: 1em;
+  transition: border-color $transition;
+}
+
+@mixin scrollbar-styles {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: $bg-card;
+    border-radius: $border-radius-sm;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: $border-secondary;
+    border-radius: $border-radius-sm;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: $bg-card;
+  }
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin focus-ring {
+  outline: 2px solid $primary;
+  outline-offset: 2px;
+}
+
+/* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
-  font-family: 'SF Mono', 'Monaco', 'Inconsolata', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: $font-family;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: dark;
-  color: #f0f6fc;
-  background-color: #0d1117;
+  color: $text-primary;
+  background-color: $bg-primary;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  /* Theme Colors */
+  --bg-primary: #{$bg-secondary};
+  --bg-secondary: #{$bg-tertiary};
+  --bg-tertiary: #{$bg-card};
+  --bg-header: #{$bg-header};
+  --bg-hover: #{$bg-hover};
+  --bg-focused: #{$bg-focused};
+  --text-primary: #{$text-primary};
+  --text-secondary: #{$text-secondary};
+  --text-muted: #{$text-muted};
+  --text-accent: #{$text-accent};
+  --border-primary: #{$border-primary};
+  --border-secondary: #{$border-secondary};
+  --border-accent: #{$border-accent};
+  --success: #{$success};
+  --warning: #{$warning};
+  --error: #{$error};
+  --info: #{$info};
 }
 
 /* Global Reset */
@@ -64,67 +181,59 @@ h6 {
   line-height: 1.2;
 }
 
-/* Links */
+/* Links - Using SCSS nesting */
 a {
-  color: #2496ed;
+  color: $primary;
   text-decoration: none;
-}
 
-a:hover {
-  color: #1f8ce7;
+  &:hover {
+    color: $primary-hover;
+  }
 }
 
 /* Code */
 code {
-  font-family: 'SF Mono', 'Monaco', 'Menlo', monospace;
+  font-family: $monospace;
   background-color: rgba(255, 255, 255, 0.05);
   padding: 0.1em 0.3em;
-  border-radius: 0.2em;
+  border-radius: $border-radius-sm;
   font-size: 0.9em;
 }
 
-/* Buttons */
+/* ===== COMPONENTS ===== */
+
+/* Buttons - Using SCSS nesting and mixins */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-  color: #f8f9fa;
+  @include btn-base;
+  background-color: $bg-secondary;
+  color: $text-primary;
+
+  &:hover {
+    border-color: $primary;
+    background-color: rgba($primary, 0.1);
+  }
+
+  &:focus,
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:focus {
+    outline: none; // Remove default focus for custom focus-ring
+  }
 }
 
-button:hover {
-  border-color: #2496ed;
-  background-color: rgba(36, 150, 237, 0.1);
-}
-
-button:focus,
-button:focus-visible {
-  outline: 2px solid #2496ed;
-  outline-offset: 2px;
-}
-
-/* Inputs */
+/* Inputs - Using SCSS nesting and mixins */
 input,
 textarea {
-  border-radius: 8px;
-  border: 1px solid #404040;
-  color: #f0f6fc;
-  background-color: #161b22;
-  padding: 0.6em;
-  font-family: inherit;
-  font-size: 1em;
-  transition: border-color 0.25s;
-}
+  @include input-base;
+  color: $text-primary;
+  background-color: $bg-input;
 
-input:focus,
-textarea:focus {
-  border-color: #2496ed;
-  outline: 2px solid transparent;
+  &:focus {
+    border-color: $primary;
+    outline: 2px solid transparent;
+  }
 }
 
 /* Placeholders */
@@ -134,28 +243,7 @@ textarea:focus {
 }
 
 /* Scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #252526;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #404040;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-::-webkit-scrollbar-corner {
-  background: #252526;
-}
+@include scrollbar-styles;
 
 /* Selection */
 ::selection {
@@ -249,26 +337,3 @@ textarea:focus {
 .bg-terminal { background-color: #1e1e1e; }
 .bg-header { background-color: #2d2d2d; }
 .bg-hover:hover { background-color: #37373d; }
-
-/* Dark Theme Colors */
---bg-primary: #1a1a1a;
---bg-secondary: #1e1e1e;
---bg-tertiary: #252526;
---bg-header: #2d2d2d;
---bg-hover: #37373d;
---bg-focused: #404040;
-
---text-primary: #f8f9fa;
---text-secondary: #9ca3af;
---text-muted: #6b7280;
---text-accent: #61dafb;
-
---border-primary: #3c3c3c;
---border-secondary: #404040;
---border-accent: #61dafb;
-
-/* Status Colors */
---success: #10b981;
---warning: #f59e0b;
---error: #ef4444;
---info: #61dafb;
