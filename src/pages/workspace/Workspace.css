@@ -1,0 +1,409 @@
+/* Docker/K8s Style Workspace */
+.workspace {
+  min-height: 100vh;
+  background-color: #0d1117;
+  color: #f0f6fc;
+  display: flex;
+  flex-direction: column;
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+}
+
+/* Header - Minimal Docker style */
+.workspace-header {
+  height: 48px;
+  background: #2d2d2d;
+  border-bottom: 1px solid #404040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.workspace-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-icon {
+  color: #2496ed;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #f8f9fa;
+}
+
+.title-desc {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-btn:hover {
+  background: #404040;
+  color: #f8f9fa;
+}
+
+.action-btn.primary {
+  background: #2496ed;
+  color: #ffffff;
+}
+
+.action-btn.primary:hover {
+  background: #1f8ce7;
+}
+
+/* Header Navigation Tabs */
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-left: auto;
+  margin-right: 16px;
+}
+
+.nav-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: #8b949e;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-tab:hover {
+  background: #30363d;
+  color: #f0f6fc;
+}
+
+.nav-tab.active {
+  background: #388bfd;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nav-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  background: #58a6ff;
+  border-radius: 1px;
+}
+
+.nav-tab .tab-icon {
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+/* Main Layout */
+.workspace-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Sidebar - Docker/K8s style */
+.sidebar {
+  width: 280px;
+  background: #252526;
+  border-right: 1px solid #3c3c3c;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.sidebar.collapsed {
+  width: 48px;
+}
+
+.sidebar-content {
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Section Headers */
+.sidebar-section {
+  margin-bottom: 24px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  margin-bottom: 8px;
+}
+
+.section-header h3 {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.collapse-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.collapse-btn:hover {
+  background: #404040;
+  color: #f8f9fa;
+}
+
+.collapse-btn .rotated {
+  transform: rotate(90deg);
+}
+
+/* Databases List */
+.databases-list {
+  padding: 0 8px;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.empty-state p {
+  margin: 12px 0 16px 0;
+  font-size: 14px;
+}
+
+.add-db-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #2496ed;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-db-btn:hover {
+  background: #1f8ce7;
+}
+
+.add-db-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Database Items */
+.db-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  margin: 2px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-left: 2px solid transparent;
+}
+
+.db-item:hover {
+  background: #404040;
+}
+
+.db-item.active {
+  background: #37373d;
+  border-left-color: #2496ed;
+}
+
+.db-icon {
+  color: #2496ed;
+  opacity: 0.8;
+}
+
+.db-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.db-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f8f9fa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.db-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Navigation Menu */
+.sidebar-nav {
+  margin-top: auto;
+  padding: 16px 8px 24px 8px;
+  border-top: 1px solid #3c3c3c;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  margin: 2px 0;
+}
+
+.nav-item:hover {
+  background: #404040;
+  color: #f8f9fa;
+}
+
+.nav-item.active {
+  background: #2496ed;
+  color: #ffffff;
+}
+
+.nav-item .tab-icon {
+  width: 16px;
+  height: 16px;
+  color: inherit;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  background: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.main-content > * {
+  flex: 1;
+  overflow: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 240px;
+  }
+
+  .sidebar.collapsed {
+    width: 40px;
+  }
+
+  .workspace-header {
+    padding: 0 12px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .title-desc {
+    display: none;
+  }
+}
+
+/* Scrolling */
+.databases-list,
+.main-content {
+  scrollbar-width: thin;
+  scrollbar-color: #404040 #252526;
+}
+
+.databases-list::-webkit-scrollbar,
+.main-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.databases-list::-webkit-scrollbar-track,
+.main-content::-webkit-scrollbar-track {
+  background: #252526;
+}
+
+.databases-list::-webkit-scrollbar-thumb,
+.main-content::-webkit-scrollbar-thumb {
+  background: #404040;
+  border-radius: 3px;
+}
+
+.databases-list::-webkit-scrollbar-thumb:hover,
+.main-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
