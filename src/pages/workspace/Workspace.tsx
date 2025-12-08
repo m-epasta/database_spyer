@@ -92,13 +92,11 @@ const Workspace: React.FC = () => {
 
       <div className="workspace-main">
         {/* Sidebar - Collapsed state for future use */}
-        <aside className="sidebar collapsed">
           <div className="sidebar-content">
             <div className="sidebar-section">
               <span className="placeholder-text">DB Explorer</span>
             </div>
           </div>
-        </aside>
 
         {/* Main Content */}
         <main className="main-content">
